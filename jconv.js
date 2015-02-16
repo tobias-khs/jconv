@@ -718,7 +718,10 @@
 				// KANJI
 				else {
 					var code = ( buf1 << 8 ) + buf[ i++ ];
-					unicode  = tableSjis[ code ] || unknown;
+					unicode  = tableSjis[ code ];
+					if (!unicode) {
+						throw new Error('Unknown character.');
+					}
 				}
 				offset = setUtf8Buf( unicode, utf8Buf, offset );
 			}
