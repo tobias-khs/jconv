@@ -732,6 +732,7 @@
 				var buf1;
 				if (i < 0) {
 					buf1 = overflowChar;
+					overflowChar = null;
 					i++;
 
 				} else {
