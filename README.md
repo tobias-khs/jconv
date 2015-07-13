@@ -1,6 +1,8 @@
 jconv
 =====
 
+Only for testing purposes. Original: https://github.com/narirou/jconv
+
 > Pure JavaScript Iconv for Japanese encodings.
 
 [![Build Status][travis-image]][travis-url]
