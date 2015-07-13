@@ -41,6 +41,10 @@
 		}
 	};
 
+	jconv.getOverflowChar = function() {
+		return overflowChar;
+	};
+
 	jconv.defineEncoding = function( obj ) {
 		var Encoding = function( obj ) {
 			this.name = obj.name;

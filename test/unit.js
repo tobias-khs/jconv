@@ -2,7 +2,7 @@
 
 var fs       = require( 'fs' ),
 	should   = require( 'should' ),
-	jconv    = require( __dirname + '/../' ),
+	jconv    = require( __dirname + '/../').jconv,
 	jconvMin = require( __dirname + '/../jconv.min' );
 
 function getBuffer( type, name ) {
