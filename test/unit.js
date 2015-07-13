@@ -29,6 +29,31 @@ function check( type, from, to ) {
 	});
 }
 
+function checkSjisToUtf8( sjisBufArr, expectedStr ) {
+
+	// jconv
+	it( 'checkSjisToUtf8', function() {
+		jconv.init({overflowEnabled:true});
+		var outputArr = sjisBufArr.map(function(sjisBuf) {
+			return jconv.convert( sjisBuf, 'sjis', 'utf8').toString();
+		});
+
+		console.log('Result:', JSON.stringify(outputArr));
+		should( outputArr.join('') ).eql( expectedStr );
+	});
+
+	// jconv.min
+	it( 'checkSjisToUtf8 ( jconv.min )', function() {
+		jconvMin.init({overflowEnabled:true});
+		var outputArr = sjisBufArr.map(function(sjisBuf) {
+			return jconvMin.convert( sjisBuf, 'sjis', 'utf8').toString();
+		});
+
+		console.log('Result:', JSON.stringify(outputArr));
+		should( outputArr.join('') ).eql( expectedStr );
+	});
+}
+
 // jconv.encodingExists
 describe( 'jconv.encodingExists', function() {
 	it( '# exists', function() {
@@ -267,3 +292,28 @@ describe( 'jconv.convert UNICODE', function() {
 	check( 'BASIC', 'UNICODE', 'EUCJP' );
 	check( 'BASIC', 'UNICODE', 'UTF8' );
 });
+
+
+//checkSjisToUtf8
+describe( 'jconv.convert broken SjisToUtf8', function() {
+	var bufArr = [
+		new Buffer([0x8e, 0x64, 0x8e]),
+		new Buffer([0x96, 0x2c, 0x8d, 0x44, 0x8f, 0xf0])
+	];
+	checkSjisToUtf8(bufArr, '仕事,好条');
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -4,6 +4,7 @@ test/converted/
 # Tools
 *.sublime-workspace
 *.sublime-project
+.idea
 
 # Node
 node_modules

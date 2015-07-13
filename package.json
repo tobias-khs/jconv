@@ -1,7 +1,7 @@
 {
   "name": "jconv",
   "description": "A pure-JavaScript converter for Japanese character encodings. (Shift_JIS, ISO-2022-JP, EUC-JP, UTF-8, UCS-2)",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "auther": "narirou <narirou.github@gmail.com>",
   "repository": {
     "type": "git",
@@ -9,7 +9,9 @@
   },
   "main": "jconv.js",
   "scripts": {
-    "test": "mocha ./test/unit"
+    "testx": "mocha ./test/unit",
+    "test": "./node_modules/mocha/bin/mocha ./test",
+    "unit": "./node_modules/mocha/bin/mocha ./test/unit"
   },
   "engines": {
     "node": ">=0.8.0"

@@ -23,9 +23,22 @@
 	};
 
 	var encodings = {};
+	var overflowChar = null;
+	var swallowChar = false;
+	var overflowEnabled = false;
 
 	var jconv = module.exports = function( buf, from, to ) {
 		return jconv.convert( buf, from, to );
+	};
+
+	jconv.init = function(args) {
+		overflowChar = null;
+		if (args && args.overflowEnabled) {
+			overflowEnabled = args.overflowEnabled;
+		}
+		if (args && args.swallowChar) {
+			swallowChar = args.swallowChar;
+		}
 	};
 
 	jconv.defineEncoding = function( obj ) {
@@ -699,13 +712,27 @@
 			var tableSjis  = tables[ 'SJIS' ],
 				setUtf8Buf = setUtf8Buffer;
 
+			var indexStart = 0;
+			if (overflowEnabled && overflowChar) {
+				indexStart = -1;
+			}
+
 			var len     = buf.length,
+				lastIdx = len - 1,
 				utf8Buf = new Buffer( len * 3 ),
 				offset  = 0,
+				offsetOverflow  = null,
 				unicode;
 
-			for( var i = 0; i < len; ) {
-				var buf1 = buf[ i++ ];
+			for( var i = indexStart; i < len; ) {
+				var buf1;
+				if (i < 0) {
+					buf1 = overflowChar;
+					i++;
+
+				} else {
+					buf1 = buf[ i++ ];
+				}
 
 				// ASCII
 				if( buf1 < 0x80 ) {
@@ -720,10 +747,22 @@
 					var code = ( buf1 << 8 ) + buf[ i++ ];
 					unicode  = tableSjis[ code ];
 					if (!unicode) {
-						throw new Error('Unknown character.');
+						if (i >= lastIdx && overflowEnabled) {
+							overflowChar = buf1;
+							offsetOverflow = offset;
+							break;
+						} else if (swallowChar) {
+							unicode = unknown;
+						} else {
+							throw new Error('Unknown character.');
+						}
 					}
 				}
 				offset = setUtf8Buf( unicode, utf8Buf, offset );
+			}
+
+			if (offsetOverflow) {
+				return utf8Buf.slice( 0, offsetOverflow );
 			}
 			return utf8Buf.slice( 0, offset );
 		}

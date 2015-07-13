@@ -58,3 +58,21 @@ convertTest( 'JIS', 'EUCJP' );
 convertTest( 'EUCJP', 'UTF8' );
 convertTest( 'EUCJP', 'SJIS' );
 convertTest( 'EUCJP', 'JIS' );
+
+// SJIStoUTF8 broken char
+function convertTest2( from, to ) {
+	var FROM = from.toUpperCase(),
+		TO   = to.toUpperCase();
+
+	console.log( '[ ' + FROM + ' -> ' + TO + ' ]' );
+
+	var buffer = fs.readFileSync( inputPath + FROM + '.TXT' );
+
+	var converted = jconv.convert( buffer, FROM, TO );
+
+	console.log( converted.toString( internalEncoding[ TO ] ) );
+
+	fs.writeFileSync( outputPath + FROM + '-' + TO + '.TXT', converted );
+
+	return converted;
+}
